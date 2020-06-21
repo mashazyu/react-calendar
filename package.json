@@ -13,7 +13,8 @@
     "build": "babel src --ignore __tests__ --out-dir lib",
     "lint": "eslint src --ignore-path .gitignore",
     "test": "jest",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn run build",
+    "prepare": "yarn run build"
   },
   "author": "Hanse",
   "license": "MIT",
