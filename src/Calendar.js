@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
+import addMonths from 'date-fns/addMonths';
+import isToday from 'date-fns/isToday';
+import format from 'date-fns/format';
+import subMonths from 'date-fns/subMonths';
 import cx from 'classnames';
+
 import createDateObjects from './createDateObjects';
 
 export default class Calendar extends Component {
   static propTypes = {
     /** Week offset*/
     weekOffset: PropTypes.number.isRequired,
-    /** The current date as a moment objecct */
+    /** The current date as a Date() objecct */
     date: PropTypes.object.isRequired,
     /** Function to render a day cell */
     renderDay: PropTypes.func,
@@ -32,22 +36,22 @@ export default class Calendar extends Component {
     weekOffset: 0,
     renderDay: ({ day, classNames, onPickDate }) => (
       <div
-        key={day.format()}
+        key={day.toString()}
         className={cx(
           'Calendar-grid-item',
-          day.isSame(moment(), 'day') && 'Calendar-grid-item--current',
+          isToday(day) && 'Calendar-grid-item--current',
           classNames
         )}
         onClick={e => onPickDate(day)}
       >
-        {day.format('D')}
+        {format(day, 'd')}
       </div>
     ),
     renderHeader: ({ date, onPrevMonth, onNextMonth }) => (
       <div className="Calendar-header">
         <button onClick={onPrevMonth}>«</button>
         <div className="Calendar-header-currentDate">
-          {date.format('MMMM YYYY')}
+          {format(date, 'MMMM yyyy')}
         </div>
         <button onClick={onNextMonth}>»</button>
       </div>
@@ -59,7 +63,7 @@ export default class Calendar extends Component {
       return this.props.onNextMonth();
     }
 
-    this.props.onChangeMonth(this.props.date.clone().add(1, 'months'));
+    this.props.onChangeMonth(addMonths(this.props.date, 1));
   };
 
   handlePrevMonth = () => {
@@ -67,7 +71,7 @@ export default class Calendar extends Component {
       return this.props.onPrevMonth();
     }
 
-    this.props.onChangeMonth(this.props.date.clone().subtract(1, 'months'));
+    this.props.onChangeMonth(subMonths(this.props.date, 1));
   };
 
   render() {
