@@ -21,7 +21,7 @@ export default function createDateObjects(date, weekOffset = 0) {
   const currentMonthDays = [];
   for (let i = 1; i < getDaysInMonth(date) + 1; i++) {
     currentMonthDays.push({
-      day: new Date(date.getYear(), date.getMonth(), i)
+      day: new Date(date.getFullYear(), date.getMonth(), i)
     });
   }
 
